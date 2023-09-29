@@ -15,11 +15,11 @@ with open(path.join(HERE, 'README.md'), encoding='utf-8') as f:
 # This call to setup() does all the work
 setup(
     name="routy",
-    version="0.1.0",
+    version="0.1.1",
     description="Library for comparing routing models",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://routy.readthedocs.io/",
+    url="https://github.com/sofaki000/routy",
     author="Sofia Kardami",
     author_email="sofikardami2000@gmail.com",
     license="MIT",
