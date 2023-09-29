@@ -47,7 +47,7 @@ def plot_route(coordinates, route_indices, filename):
     y = [coord[1] for coord in coordinates]
 
     # Plot the points
-    plt.scatter(x, y, color=&#39;blue&#39;)#, label=&#39;Points&#39;)
+    plt.scatter(x, y, color=&#39;blue&#39;)
 
     # Plot the route
     for i in range(len(route_indices) - 1):
@@ -134,18 +134,7 @@ def plot_multiple_routes_for_same_coordinates(coordinates, all_route_indices, ba
 
     plt.suptitle(&#39;Route Plots&#39;)
     plt.tight_layout()
-    plt.savefig(f&#39;{base_filename}_routes.png&#39;)
-
-# Example usage
-# coordinates = [(0, 0), (1, 1), (2, 2), (3, 0), (1, -1)]
-# route1 = [0, 1, 2, 3, 4]
-# route2 = [1, 2, 0, 4, 3]
-#
-# # Pass multiple routes as a list
-# all_routes = [route1, route2]
-#
-# plot_multiple_routes_for_same_coordinates(coordinates, all_routes,  &#39;route_plot.png&#39;)
-#</code></pre>
+    plt.savefig(f&#39;{base_filename}.png&#39;)</code></pre>
 </details>
 </section>
 <section>
@@ -222,7 +211,7 @@ None</p></div>
 
     plt.suptitle(&#39;Route Plots&#39;)
     plt.tight_layout()
-    plt.savefig(f&#39;{base_filename}_routes.png&#39;)</code></pre>
+    plt.savefig(f&#39;{base_filename}.png&#39;)</code></pre>
 </details>
 </dd>
 <dt id="routy.plotUtilities.plotRoute.plot_route"><code class="name flex">
@@ -255,7 +244,7 @@ None</p></div>
     y = [coord[1] for coord in coordinates]
 
     # Plot the points
-    plt.scatter(x, y, color=&#39;blue&#39;)#, label=&#39;Points&#39;)
+    plt.scatter(x, y, color=&#39;blue&#39;)
 
     # Plot the route
     for i in range(len(route_indices) - 1):
