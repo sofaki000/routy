@@ -62,9 +62,11 @@ def plot_route(coordinates, route_indices, filename):
     for i, txt in enumerate(route_indices):
         plt.annotate(txt, (x[i], y[i]), textcoords=&#34;offset points&#34;, xytext=(0, 10), ha=&#39;center&#39;)
 
+    route_distance = calculate_distance(coordinates, route_indices)
+
     plt.xlabel(&#39;X&#39;)
     plt.ylabel(&#39;Y&#39;)
-    plt.title(&#39;Route Plot&#39;)
+    plt.title(f&#39;Distance travelled: {route_distance:.2f}&#39;)
     plt.legend()
     plt.grid()
     plt.savefig(filename)
@@ -259,9 +261,11 @@ None</p></div>
     for i, txt in enumerate(route_indices):
         plt.annotate(txt, (x[i], y[i]), textcoords=&#34;offset points&#34;, xytext=(0, 10), ha=&#39;center&#39;)
 
+    route_distance = calculate_distance(coordinates, route_indices)
+
     plt.xlabel(&#39;X&#39;)
     plt.ylabel(&#39;Y&#39;)
-    plt.title(&#39;Route Plot&#39;)
+    plt.title(f&#39;Distance travelled: {route_distance:.2f}&#39;)
     plt.legend()
     plt.grid()
     plt.savefig(filename)</code></pre>
