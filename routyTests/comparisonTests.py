@@ -110,7 +110,7 @@ class PlotRouteTestCase(unittest.TestCase):
         route1 = [[0, 1, 2, 3, 4]]
         route2 = [[2, 1, 2, 3, 4]]
         try:
-            result = self.comparison.compareModelDistances(coordinates, route1, route2)
+            result = self.comparison.compare_model_distances(coordinates, route1, route2)
 
             self.assertIsNotNone(result)
         except:
@@ -123,12 +123,14 @@ class PlotRouteTestCase(unittest.TestCase):
          [[1, 2, 3, 4, 5, 6, 7]], []],
         [[],
          [[1, 2, 3, 4, 5, 6, 7],[1, 2, 3, 4, 5, 6, 7]], [[1, 2, 3, 4, 5, 6, 7], [1, 2, 3, 4, 5, 6, 7]]],
+        [3242342,
+         [[1, 2, 3, 4, 5, 6, 7], [1, 2, 3, 4, 5, 6, 7]], [[1, 2, 3, 4, 5, 6, 7], [1, 2, 3, 4, 5, 6, 7]]],
 
     ])
     def test_compareModelDistancesThrowsAssertionErrorOnIncorrectArgumentsSize(self, coords, route1, route2):
 
         with self.assertRaises(AssertionError):
-            result = self.comparison.compareModelDistances(coords, route1, route2)
+            result = self.comparison.compare_model_distances(coords, route1, route2)
             self.assertIsNone(result)
 
 

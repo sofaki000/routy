@@ -29,13 +29,26 @@
 <pre><code class="python">import matplotlib.pyplot as plt
 from scipy.spatial.distance import euclidean
 
-def calculate_distance(coordinates, route_indices):
+
+from enum import Enum
+
+class DistanceType(Enum):
+    EUCLIDEAN = &#39;euclidean&#39;
+    MANHATTAN = &#39;manhattan&#39;
+    CHEBYSHEV = &#39;chebyshev&#39;
+
+def calculate_distance(coordinates, route_indices, distance_type=&#34;euclidean&#34;):
     &#34;&#34;&#34;
     Calculates the total Euclidean distance for a route based on coordinates and route order.
 
     Parameters:
     coordinates (list of tuple): Coordinates (x, y) of the points.
     route_indices (list): Order of indices representing the route.
+    distance_type (str, optional): The type of distance to calculate.
+        Options include:
+        - &#39;euclidean&#39; (default): Euclidean distance.
+        - &#39;manhattan&#39;: Manhattan distance.
+        - &#39;chebyshev&#39;: Chebyshev distance.
 
     Returns:
     float: Total Euclidean distance for the route.
@@ -45,7 +58,22 @@ def calculate_distance(coordinates, route_indices):
     for i in range(len(route_indices) - 1):
         start_index = route_indices[i]
         end_index = route_indices[i + 1]
-        total_distance += euclidean(coordinates[start_index], coordinates[end_index])
+
+        if distance_type == DistanceType.EUCLIDEAN:
+            total_distance += euclidean(coordinates[start_index], coordinates[end_index])
+        elif distance_type == DistanceType.MANHATTAN:
+            # Manhattan distance
+            total_distance += abs(coordinates[end_index][0] - coordinates[start_index][0]) + \
+                              abs(coordinates[end_index][1] - coordinates[start_index][1])
+        elif distance_type == DistanceType.CHEBYSHEV:
+            # Chebyshev distance
+            total_distance = max(total_distance,
+                             max(abs(coordinates[end_index][0] - coordinates[start_index][0]),
+                                 abs(coordinates[end_index][1] - coordinates[start_index][1])))
+
+        else:
+            raise NotImplementedError(&#34;Invalid distance type&#34;)
+
 
     # Add distance between the last and first points to complete the route
     total_distance += euclidean(coordinates[route_indices[-1]], coordinates[route_indices[0]])
@@ -61,26 +89,36 @@ def calculate_distance(coordinates, route_indices):
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
 <dt id="routy.distanceUtilities.distanceUtilities.calculate_distance"><code class="name flex">
-<span>def <span class="ident">calculate_distance</span></span>(<span>coordinates, route_indices)</span>
+<span>def <span class="ident">calculate_distance</span></span>(<span>coordinates, route_indices, distance_type='euclidean')</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Calculates the total Euclidean distance for a route based on coordinates and route order.</p>
 <p>Parameters:
 coordinates (list of tuple): Coordinates (x, y) of the points.
-route_indices (list): Order of indices representing the route.</p>
+route_indices (list): Order of indices representing the route.
+distance_type (str, optional): The type of distance to calculate.
+Options include:
+- 'euclidean' (default): Euclidean distance.
+- 'manhattan': Manhattan distance.
+- 'chebyshev': Chebyshev distance.</p>
 <p>Returns:
 float: Total Euclidean distance for the route.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def calculate_distance(coordinates, route_indices):
+<pre><code class="python">def calculate_distance(coordinates, route_indices, distance_type=&#34;euclidean&#34;):
     &#34;&#34;&#34;
     Calculates the total Euclidean distance for a route based on coordinates and route order.
 
     Parameters:
     coordinates (list of tuple): Coordinates (x, y) of the points.
     route_indices (list): Order of indices representing the route.
+    distance_type (str, optional): The type of distance to calculate.
+        Options include:
+        - &#39;euclidean&#39; (default): Euclidean distance.
+        - &#39;manhattan&#39;: Manhattan distance.
+        - &#39;chebyshev&#39;: Chebyshev distance.
 
     Returns:
     float: Total Euclidean distance for the route.
@@ -90,7 +128,22 @@ float: Total Euclidean distance for the route.</p></div>
     for i in range(len(route_indices) - 1):
         start_index = route_indices[i]
         end_index = route_indices[i + 1]
-        total_distance += euclidean(coordinates[start_index], coordinates[end_index])
+
+        if distance_type == DistanceType.EUCLIDEAN:
+            total_distance += euclidean(coordinates[start_index], coordinates[end_index])
+        elif distance_type == DistanceType.MANHATTAN:
+            # Manhattan distance
+            total_distance += abs(coordinates[end_index][0] - coordinates[start_index][0]) + \
+                              abs(coordinates[end_index][1] - coordinates[start_index][1])
+        elif distance_type == DistanceType.CHEBYSHEV:
+            # Chebyshev distance
+            total_distance = max(total_distance,
+                             max(abs(coordinates[end_index][0] - coordinates[start_index][0]),
+                                 abs(coordinates[end_index][1] - coordinates[start_index][1])))
+
+        else:
+            raise NotImplementedError(&#34;Invalid distance type&#34;)
+
 
     # Add distance between the last and first points to complete the route
     total_distance += euclidean(coordinates[route_indices[-1]], coordinates[route_indices[0]])
@@ -101,6 +154,44 @@ float: Total Euclidean distance for the route.</p></div>
 </dl>
 </section>
 <section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="routy.distanceUtilities.distanceUtilities.DistanceType"><code class="flex name class">
+<span>class <span class="ident">DistanceType</span></span>
+<span>(</span><span>value, names=None, *, module=None, qualname=None, type=None, start=1)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>An enumeration.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class DistanceType(Enum):
+    EUCLIDEAN = &#39;euclidean&#39;
+    MANHATTAN = &#39;manhattan&#39;
+    CHEBYSHEV = &#39;chebyshev&#39;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>enum.Enum</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="routy.distanceUtilities.distanceUtilities.DistanceType.CHEBYSHEV"><code class="name">var <span class="ident">CHEBYSHEV</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="routy.distanceUtilities.distanceUtilities.DistanceType.EUCLIDEAN"><code class="name">var <span class="ident">EUCLIDEAN</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="routy.distanceUtilities.distanceUtilities.DistanceType.MANHATTAN"><code class="name">var <span class="ident">MANHATTAN</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+</dl>
 </section>
 </article>
 <nav id="sidebar">
@@ -117,6 +208,18 @@ float: Total Euclidean distance for the route.</p></div>
 <li><h3><a href="#header-functions">Functions</a></h3>
 <ul class="">
 <li><code><a title="routy.distanceUtilities.distanceUtilities.calculate_distance" href="#routy.distanceUtilities.distanceUtilities.calculate_distance">calculate_distance</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="routy.distanceUtilities.distanceUtilities.DistanceType" href="#routy.distanceUtilities.distanceUtilities.DistanceType">DistanceType</a></code></h4>
+<ul class="">
+<li><code><a title="routy.distanceUtilities.distanceUtilities.DistanceType.CHEBYSHEV" href="#routy.distanceUtilities.distanceUtilities.DistanceType.CHEBYSHEV">CHEBYSHEV</a></code></li>
+<li><code><a title="routy.distanceUtilities.distanceUtilities.DistanceType.EUCLIDEAN" href="#routy.distanceUtilities.distanceUtilities.DistanceType.EUCLIDEAN">EUCLIDEAN</a></code></li>
+<li><code><a title="routy.distanceUtilities.distanceUtilities.DistanceType.MANHATTAN" href="#routy.distanceUtilities.distanceUtilities.DistanceType.MANHATTAN">MANHATTAN</a></code></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>

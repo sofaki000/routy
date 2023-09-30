@@ -32,6 +32,7 @@ from torch.autograd import Variable
 from torch.utils.data import  DataLoader
 
 from routy import Comparison
+from routy.distanceUtilities.distanceUtilities import DistanceType
 from routy.modelsForComparison.tsp import CombinatorialRL, reward, TSPDataset
 import matplotlib
 
@@ -103,7 +104,7 @@ if __name__ == &#39;__main__&#39;:
             embedding=&#34;Conv&#34;,
             attention=&#34;Dot&#34;)
         tsp_20_model_untrained.eval()
-        test_size = 2000
+        test_size = 100
         test_20_dataset = TSPDataset(20, test_size)
         test_loader_20nodes = DataLoader(test_20_dataset, batch_size=100, shuffle=True, num_workers=1)
 
@@ -199,7 +200,10 @@ if __name__ == &#39;__main__&#39;:
             routes1.append(first_column_row.tolist())
             routes2.append(sec_column_row.tolist())
 
-        comparison.compareModelDistances(coordinates, routes1, routes2)</code></pre>
+
+        comparison.compare_model_distances(coordinates, routes1, routes2, DistanceType.EUCLIDEAN)
+        comparison.compare_model_distances(coordinates, routes1, routes2, DistanceType.MANHATTAN)
+        comparison.compare_model_distances(coordinates, routes1, routes2, DistanceType.CHEBYSHEV)</code></pre>
 </details>
 </section>
 <section>
