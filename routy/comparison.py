@@ -1,3 +1,5 @@
+from routy.Logger import Logger
+from routy.distanceUtilities.distanceUtilities import calculate_distance
 from routy.plotUtilities.plotRoute import plot_multiple_routes_for_same_coordinates, plot_route
 
 
@@ -9,7 +11,8 @@ class Comparison:
     """
 
     def __init__(self):
-        pass
+
+        self.logger = Logger()
 
     def plot_route(self, coordinates, routes, filename="route"):
         '''
@@ -27,7 +30,7 @@ class Comparison:
 
         seq_len = len(routes)
         assert seq_len == len(coordinates)
-        assert type(coordinates[0]) is tuple
+        assert type(coordinates[0]) is tuple or len(coordinates[1]) ==2
 
         plot_route(coordinates, routes, f'{filename}.png')
 
@@ -48,10 +51,40 @@ class Comparison:
         seq_len = len(routes[0])
         assert seq_len == len(coordinates)
 
-        assert type(coordinates[0]) is tuple
+        assert type(coordinates[0]) is tuple or  len(coordinates[0]) == 2
         assert type(routes) is list
         plot_multiple_routes_for_same_coordinates(coordinates,
                                                   routes,
                                                   filename)
+    def compareModelDistances(self, coordinates, model1Routes, model2Routes):
+        """
+        Calculate the percentage of routes where model1 suggests a shorter route compared to model2.
+
+        Parameters:
+        model1_routes (list): List of routes suggested by model1.
+        model2_routes (list): List of routes suggested by model2.
+        Returns:
+        float: Percentage of routes where model1 suggests a shorter route compared to model2.
+        """
+
+        total_routes = len(coordinates)
+
+        assert total_routes == len(model1Routes)
+        assert total_routes == len(model2Routes)
+        shorter_routes_count = 0
+
+        for i in range(total_routes):
+            coords = coordinates[i]
+            route1 = model1Routes[i]
+            route2 = model2Routes[i]
+            dist1 = calculate_distance(coords, route1)
+            dist2 = calculate_distance(coords, route2)
+
+            if dist1 < dist2:
+                shorter_routes_count += 1
 
 
+        percentage_shorter_routes = (shorter_routes_count / total_routes) * 100
+
+        self.logger.log(f'Model 1 has {percentage_shorter_routes}% shorter routes from model 2, for {total_routes} total routes')
+        return percentage_shorter_routes

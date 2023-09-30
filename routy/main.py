@@ -75,12 +75,12 @@ if __name__ == '__main__':
             embedding="Conv",
             attention="Dot")
         tsp_20_model_untrained.eval()
-        test_size = 2
+        test_size = 2000
         test_20_dataset = TSPDataset(20, test_size)
         test_loader_20nodes = DataLoader(test_20_dataset, batch_size=100, shuffle=True, num_workers=1)
 
         test_5_dataset = TSPDataset(5, test_size)
-        test_loader = DataLoader(test_5_dataset, batch_size=100, shuffle=True, num_workers=1)
+        test_loader = DataLoader(test_5_dataset, batch_size=2, shuffle=True, num_workers=1)
 
         tsp_dot_attention_model20_path = "tsp_20_dot_attention.pt"
 
@@ -109,6 +109,38 @@ if __name__ == '__main__':
         tsp_20_model_untrained.eval()
 
 
+        # for batch_id, sample_batch in enumerate(test_loader):
+        #     inputs = Variable(sample_batch)
+        #     R_1, probs_1, actions_1, actions_idxs_trained1 = tsp_dot_attention_model20_trained(inputs)
+        #
+        #     R, probs, actions, actions_idxs = tsp_20_model_untrained(inputs)
+        #
+        #     print(f'{actions_idxs}')
+        #     tensors = actions_idxs
+        #
+        #     first_column_row = torch.cat([tensor[0].unsqueeze(0) for tensor in tensors])
+        #     sec_column_row = torch.cat([tensor[1].unsqueeze(0) for tensor in tensors])
+        #
+        #
+        #     print(f'{first_column_row}')
+        #     print(f'{sec_column_row}')
+        #     assert inputs.size(1) == 2
+        #     assert actions_1[0][0].size(0) == 2
+        #
+        #     "inputs: [test_size, 2, seq_len]"
+        #     "actions_1: [seq_len, test_size, 2]"
+        #
+        #     route = first_column_row.tolist()
+        #     multiple_routes = [first_column_row.tolist(), sec_column_row.tolist()]
+        #     coordinates = inputs[0].transpose(0,1).tolist()
+        #
+        #
+        #     comparison.plot_route(coordinates,route)
+        #     comparison.plot_routes(coordinates, multiple_routes)
+
+        routes1 = []
+        routes2 = []
+        coordinates = []
         for batch_id, sample_batch in enumerate(test_loader):
             inputs = Variable(sample_batch)
             R_1, probs_1, actions_1, actions_idxs_trained1 = tsp_dot_attention_model20_trained(inputs)
@@ -130,10 +162,13 @@ if __name__ == '__main__':
             "inputs: [test_size, 2, seq_len]"
             "actions_1: [seq_len, test_size, 2]"
 
-            route = first_column_row.tolist()
-            multiple_routes = [first_column_row.tolist(), sec_column_row.tolist()]
-            coordinates = inputs[0].transpose(0,1).tolist()
+            # route = first_column_row.tolist()
+            # multiple_routes = [first_column_row.tolist(), sec_column_row.tolist()]
+            # coordinates = inputs[0].transpose(0,1).tolist()
 
+            coords = inputs[0].transpose(0, 1).tolist()
+            coordinates.append(coords)
+            routes1.append(first_column_row.tolist())
+            routes2.append(sec_column_row.tolist())
 
-            comparison.plot_route(coordinates,route)
-            comparison.plot_routes(coordinates, multiple_routes)
+        comparison.compareModelDistances(coordinates, routes1, routes2)

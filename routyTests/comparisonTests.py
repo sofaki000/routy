@@ -96,5 +96,41 @@ class PlotRouteTestCase(unittest.TestCase):
             self.comparison.plot_route(coordinates, route, self.filename)
 
 
+class PlotRouteTestCase(unittest.TestCase):
+    def setUp(self):
+        self.comparison = Comparison()
+        self.filename = "route"
+
+    def tearDown(self):
+        if pl.Path(f"{self.filename}.png").resolve().is_file():
+            os.remove(f"{self.filename}.png")
+
+    def test_compareModelDistances(self):
+        coordinates = [[(0, 0), (1, 1), (2, 2), (3, 0), (1, -1)]]
+        route1 = [[0, 1, 2, 3, 4]]
+        route2 = [[2, 1, 2, 3, 4]]
+        try:
+            result = self.comparison.compareModelDistances(coordinates, route1, route2)
+
+            self.assertIsNotNone(result)
+        except:
+            self.fail("compareModelDistances raised exception unexpectedly!")
+
+    @parameterized.expand([
+        [[[(0, 0), (1, 1), (2, 2), (3, 0), (1, -1)], [(0, 0), (1, 1), (2, 2), (3, 0), (1, -1)]],
+         [[1, 2, 3, 4, 5, 6, 7]], [[1, 2, 3, 4, 5, 6, 7]]],
+        [[[(0, 0), (1, 1), (2, 2), (3, 0), (1, -1)], [(0, 0), (1, 1), (2, 2), (3, 0), (1, -1)]],
+         [[1, 2, 3, 4, 5, 6, 7]], []],
+        [[],
+         [[1, 2, 3, 4, 5, 6, 7],[1, 2, 3, 4, 5, 6, 7]], [[1, 2, 3, 4, 5, 6, 7], [1, 2, 3, 4, 5, 6, 7]]],
+
+    ])
+    def test_compareModelDistancesThrowsAssertionErrorOnIncorrectArgumentsSize(self, coords, route1, route2):
+
+        with self.assertRaises(AssertionError):
+            result = self.comparison.compareModelDistances(coords, route1, route2)
+            self.assertIsNone(result)
+
+
 if __name__ == '__main__':
     unittest.main()

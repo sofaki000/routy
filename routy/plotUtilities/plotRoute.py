@@ -35,9 +35,11 @@ def plot_route(coordinates, route_indices, filename):
     for i, txt in enumerate(route_indices):
         plt.annotate(txt, (x[i], y[i]), textcoords="offset points", xytext=(0, 10), ha='center')
 
+    route_distance = calculate_distance(coordinates, route_indices)
+
     plt.xlabel('X')
     plt.ylabel('Y')
-    plt.title('Route Plot')
+    plt.title(f'Distance travelled: {route_distance:.2f}')
     plt.legend()
     plt.grid()
     plt.savefig(filename)
