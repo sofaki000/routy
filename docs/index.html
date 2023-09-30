@@ -26,7 +26,9 @@
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">from routy.plotUtilities.plotRoute import plot_multiple_routes_for_same_coordinates, plot_route
+<pre><code class="python">from routy.Logger import Logger
+from routy.distanceUtilities.distanceUtilities import calculate_distance
+from routy.plotUtilities.plotRoute import plot_multiple_routes_for_same_coordinates, plot_route
 
 
 class Comparison:
@@ -37,7 +39,8 @@ class Comparison:
     &#34;&#34;&#34;
 
     def __init__(self):
-        pass
+
+        self.logger = Logger()
 
     def plot_route(self, coordinates, routes, filename=&#34;route&#34;):
         &#39;&#39;&#39;
@@ -55,7 +58,7 @@ class Comparison:
 
         seq_len = len(routes)
         assert seq_len == len(coordinates)
-        assert type(coordinates[0]) is tuple
+        assert type(coordinates[0]) is tuple or len(coordinates[1]) ==2
 
         plot_route(coordinates, routes, f&#39;{filename}.png&#39;)
 
@@ -76,11 +79,43 @@ class Comparison:
         seq_len = len(routes[0])
         assert seq_len == len(coordinates)
 
-        assert type(coordinates[0]) is tuple
+        assert type(coordinates[0]) is tuple or  len(coordinates[0]) == 2
         assert type(routes) is list
         plot_multiple_routes_for_same_coordinates(coordinates,
                                                   routes,
-                                                  filename)</code></pre>
+                                                  filename)
+    def compareModelDistances(self, coordinates, model1Routes, model2Routes):
+        &#34;&#34;&#34;
+        Calculate the percentage of routes where model1 suggests a shorter route compared to model2.
+
+        Parameters:
+        model1_routes (list): List of routes suggested by model1.
+        model2_routes (list): List of routes suggested by model2.
+        Returns:
+        float: Percentage of routes where model1 suggests a shorter route compared to model2.
+        &#34;&#34;&#34;
+
+        total_routes = len(coordinates)
+
+        assert total_routes == len(model1Routes)
+        assert total_routes == len(model2Routes)
+        shorter_routes_count = 0
+
+        for i in range(total_routes):
+            coords = coordinates[i]
+            route1 = model1Routes[i]
+            route2 = model2Routes[i]
+            dist1 = calculate_distance(coords, route1)
+            dist2 = calculate_distance(coords, route2)
+
+            if dist1 &lt; dist2:
+                shorter_routes_count += 1
+
+
+        percentage_shorter_routes = (shorter_routes_count / total_routes) * 100
+
+        self.logger.log(f&#39;Model 1 has {percentage_shorter_routes}% shorter routes from model 2, for {total_routes} total routes&#39;)
+        return percentage_shorter_routes</code></pre>
 </details>
 </section>
 <section>
@@ -111,7 +146,8 @@ routing models.
     &#34;&#34;&#34;
 
     def __init__(self):
-        pass
+
+        self.logger = Logger()
 
     def plot_route(self, coordinates, routes, filename=&#34;route&#34;):
         &#39;&#39;&#39;
@@ -129,7 +165,7 @@ routing models.
 
         seq_len = len(routes)
         assert seq_len == len(coordinates)
-        assert type(coordinates[0]) is tuple
+        assert type(coordinates[0]) is tuple or len(coordinates[1]) ==2
 
         plot_route(coordinates, routes, f&#39;{filename}.png&#39;)
 
@@ -150,14 +186,94 @@ routing models.
         seq_len = len(routes[0])
         assert seq_len == len(coordinates)
 
-        assert type(coordinates[0]) is tuple
+        assert type(coordinates[0]) is tuple or  len(coordinates[0]) == 2
         assert type(routes) is list
         plot_multiple_routes_for_same_coordinates(coordinates,
                                                   routes,
-                                                  filename)</code></pre>
+                                                  filename)
+    def compareModelDistances(self, coordinates, model1Routes, model2Routes):
+        &#34;&#34;&#34;
+        Calculate the percentage of routes where model1 suggests a shorter route compared to model2.
+
+        Parameters:
+        model1_routes (list): List of routes suggested by model1.
+        model2_routes (list): List of routes suggested by model2.
+        Returns:
+        float: Percentage of routes where model1 suggests a shorter route compared to model2.
+        &#34;&#34;&#34;
+
+        total_routes = len(coordinates)
+
+        assert total_routes == len(model1Routes)
+        assert total_routes == len(model2Routes)
+        shorter_routes_count = 0
+
+        for i in range(total_routes):
+            coords = coordinates[i]
+            route1 = model1Routes[i]
+            route2 = model2Routes[i]
+            dist1 = calculate_distance(coords, route1)
+            dist2 = calculate_distance(coords, route2)
+
+            if dist1 &lt; dist2:
+                shorter_routes_count += 1
+
+
+        percentage_shorter_routes = (shorter_routes_count / total_routes) * 100
+
+        self.logger.log(f&#39;Model 1 has {percentage_shorter_routes}% shorter routes from model 2, for {total_routes} total routes&#39;)
+        return percentage_shorter_routes</code></pre>
 </details>
 <h3>Methods</h3>
 <dl>
+<dt id="comparison.Comparison.compareModelDistances"><code class="name flex">
+<span>def <span class="ident">compareModelDistances</span></span>(<span>self, coordinates, model1Routes, model2Routes)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Calculate the percentage of routes where model1 suggests a shorter route compared to model2.</p>
+<p>Parameters:
+model1_routes (list): List of routes suggested by model1.
+model2_routes (list): List of routes suggested by model2.
+Returns:
+float: Percentage of routes where model1 suggests a shorter route compared to model2.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def compareModelDistances(self, coordinates, model1Routes, model2Routes):
+    &#34;&#34;&#34;
+    Calculate the percentage of routes where model1 suggests a shorter route compared to model2.
+
+    Parameters:
+    model1_routes (list): List of routes suggested by model1.
+    model2_routes (list): List of routes suggested by model2.
+    Returns:
+    float: Percentage of routes where model1 suggests a shorter route compared to model2.
+    &#34;&#34;&#34;
+
+    total_routes = len(coordinates)
+
+    assert total_routes == len(model1Routes)
+    assert total_routes == len(model2Routes)
+    shorter_routes_count = 0
+
+    for i in range(total_routes):
+        coords = coordinates[i]
+        route1 = model1Routes[i]
+        route2 = model2Routes[i]
+        dist1 = calculate_distance(coords, route1)
+        dist2 = calculate_distance(coords, route2)
+
+        if dist1 &lt; dist2:
+            shorter_routes_count += 1
+
+
+    percentage_shorter_routes = (shorter_routes_count / total_routes) * 100
+
+    self.logger.log(f&#39;Model 1 has {percentage_shorter_routes}% shorter routes from model 2, for {total_routes} total routes&#39;)
+    return percentage_shorter_routes</code></pre>
+</details>
+</dd>
 <dt id="comparison.Comparison.plot_route"><code class="name flex">
 <span>def <span class="ident">plot_route</span></span>(<span>self, coordinates, routes, filename='route')</span>
 </code></dt>
@@ -191,7 +307,7 @@ plot_route([(0, 0), (1, 1), (2, 2)], [0, 1, 2], "example_route.png")</p></div>
 
     seq_len = len(routes)
     assert seq_len == len(coordinates)
-    assert type(coordinates[0]) is tuple
+    assert type(coordinates[0]) is tuple or len(coordinates[1]) ==2
 
     plot_route(coordinates, routes, f&#39;{filename}.png&#39;)</code></pre>
 </details>
@@ -230,7 +346,7 @@ plot_routes([(0, 0), (1, 1), (2, 2)], [[0, 1, 2], [2, 1, 0]], "example_routes.pn
     seq_len = len(routes[0])
     assert seq_len == len(coordinates)
 
-    assert type(coordinates[0]) is tuple
+    assert type(coordinates[0]) is tuple or  len(coordinates[0]) == 2
     assert type(routes) is list
     plot_multiple_routes_for_same_coordinates(coordinates,
                                               routes,
@@ -253,6 +369,7 @@ plot_routes([(0, 0), (1, 1), (2, 2)], [[0, 1, 2], [2, 1, 0]], "example_routes.pn
 <li>
 <h4><code><a title="comparison.Comparison" href="#comparison.Comparison">Comparison</a></code></h4>
 <ul class="">
+<li><code><a title="comparison.Comparison.compareModelDistances" href="#comparison.Comparison.compareModelDistances">compareModelDistances</a></code></li>
 <li><code><a title="comparison.Comparison.plot_route" href="#comparison.Comparison.plot_route">plot_route</a></code></li>
 <li><code><a title="comparison.Comparison.plot_routes" href="#comparison.Comparison.plot_routes">plot_routes</a></code></li>
 </ul>
