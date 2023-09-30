@@ -9,7 +9,7 @@ class DistanceType(Enum):
     MANHATTAN = 'manhattan'
     CHEBYSHEV = 'chebyshev'
 
-def calculate_distance(coordinates, route_indices, distance_type="euclidean"):
+def calculate_distance(coordinates, route_indices, distance_type=DistanceType.EUCLIDEAN):
     """
     Calculates the total Euclidean distance for a route based on coordinates and route order.
 
@@ -22,6 +22,10 @@ def calculate_distance(coordinates, route_indices, distance_type="euclidean"):
         - 'manhattan': Manhattan distance.
         - 'chebyshev': Chebyshev distance.
 
+    Distance Equations:
+        - Euclidean distance: sqrt((x2 - x1)^2 + (y2 - y1)^2)
+        - Manhattan distance: |x2 - x1| + |y2 - y1|
+        - Chebyshev distance: max(|x2 - x1|, |y2 - y1|)
     Returns:
     float: Total Euclidean distance for the route.
     """
