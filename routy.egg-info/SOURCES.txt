@@ -1,5 +1,6 @@
 README.md
 setup.py
+routy/Logger.py
 routy/__init__.py
 routy/comparison.py
 routy/main.py
